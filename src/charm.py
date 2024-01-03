@@ -95,8 +95,7 @@ class NessieCharm(ops.CharmBase):
             "QUARKUS_DATASOURCE_USERNAME": db_data.get("db_username", None),
             "QUARKUS_DATASOURCE_PASSWORD": db_data.get("db_password", None),
         }
-        for key, value in env.items():
-            logger.debug(f'{key}\t{value}')
+        logger.info('Dict: %s', env)
         logger.info("Returning env")
         return env
     def fetch_postgres_relation_data(self) -> dict:

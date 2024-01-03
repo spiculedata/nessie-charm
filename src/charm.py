@@ -17,7 +17,7 @@ import logging
 import ops
 from charms.data_platform_libs.v0.data_interfaces import DatabaseCreatedEvent
 from charms.data_platform_libs.v0.data_interfaces import DatabaseRequires
-
+from ops.model import WaitingStatus
 # Log messages can be retrieved using juju debug-log
 logger = logging.getLogger(__name__)
 
@@ -111,6 +111,7 @@ class NessieCharm(ops.CharmBase):
                 "db_password": data["password"],
             }
             return db_data
+        self.unit.status = WaitingStatus("Waiting for database relation")
         raise DatabaseNotReady()
 
     @property

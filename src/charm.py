@@ -56,6 +56,8 @@ class NessieCharm(ops.CharmBase):
 
         Learn more about config at https://juju.is/docs/sdk/config
         """
+
+        self._handle_ports()
         # Fetch the new config value
         log_level = self.model.config["log-level"].lower()
 
@@ -97,6 +99,10 @@ class NessieCharm(ops.CharmBase):
                 }
             },
         }
+
+    def _handle_ports(self):
+        port = int(self.config["server-port"])
+        self.unit.set_ports(port)
 
 
 if __name__ == "__main__":  # pragma: nocover

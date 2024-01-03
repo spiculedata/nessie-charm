@@ -1,0 +1,5 @@
+options:
+  server-port:
+    default: 19120
+    description: Default port on which Nessie is available
+    type: int

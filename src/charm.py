@@ -153,7 +153,7 @@ class NessieCharm(ops.CharmBase):
         self.unit.status = ops.MaintenanceStatus("Assembling pod spec")
         if self.container.can_connect():
             try:
-                new_layer = self._pebble_layer.to_dict()
+                new_layer = self._pebble_layer
             except DatabaseNotReady:
                 self.unit.status = ops.WaitingStatus("Waiting for database relation")
                 return

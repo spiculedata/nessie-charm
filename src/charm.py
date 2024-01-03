@@ -93,6 +93,8 @@ class NessieCharm(ops.CharmBase):
             "QUARKUS_DATASOURCE_USERNAME": db_data.get("db_username", None),
             "QUARKUS_DATASOURCE_PASSWORD": db_data.get("db_password", None),
         }
+        for key, value in env.items():
+            logger.debug(f'{key}\t{value}')
         return env
     def fetch_postgres_relation_data(self) -> dict:
         """Fetch postgres relation data.
@@ -134,9 +136,6 @@ class NessieCharm(ops.CharmBase):
                     "command": "/usr/local/s2i/run",
                     "startup": "enabled",
                     "environment": self.app_environment,
-                    #"environment": {
-                    #    "GUNICORN_CMD_ARGS": f"--log-level {self.model.config['log-level']}"
-                    #},
                 }
             },
         }
@@ -186,8 +185,8 @@ class NessieCharm(ops.CharmBase):
             services = self.container.get_plan().to_dict().get("services", {})
             if services != new_layer["services"]:
                 # Changes were made, add the new layer
-                self.container.add_layer("fastapi_demo", self._pebble_layer, combine=True)
-                logger.info("Added updated layer 'fastapi_demo' to Pebble plan")
+                self.container.add_layer("nessie", self._pebble_layer, combine=True)
+                logger.info("Added updated layer 'nessie' to Pebble plan")
 
                 self.container.restart(self.pebble_service_name)
                 logger.info(f"Restarted '{self.pebble_service_name}' service")

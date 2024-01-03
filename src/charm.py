@@ -30,6 +30,7 @@ class NessieCharm(ops.CharmBase):
 
     def __init__(self, *args):
         super().__init__(*args)
+        self.pebble_service_name = "nessie-service"
         self.container = self.unit.get_container("nessie")
         self.framework.observe(self.on.nessie_pebble_ready, self._on_nessie_pebble_ready)
         self.framework.observe(self.on.config_changed, self._on_config_changed)
@@ -124,7 +125,7 @@ class NessieCharm(ops.CharmBase):
             "summary": "nessie layer",
             "description": "pebble config layer for nessie",
             "services": {
-                "nessie": {
+                self.pebble_service_name: {
                     "override": "replace",
                     "summary": "nessie",
                     "command": "/usr/local/s2i/run",

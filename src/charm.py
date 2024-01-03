@@ -89,10 +89,10 @@ class NessieCharm(ops.CharmBase):
                 "nessie": {
                     "override": "replace",
                     "summary": "nessie",
-                    #"command": "gunicorn -b 0.0.0.0:80 httpbin:app -k gevent",
+                    "command": "/usr/local/s2i/run",
                     "startup": "enabled",
                     #"environment": {
-                        "GUNICORN_CMD_ARGS": f"--log-level {self.model.config['log-level']}"
+                    #    "GUNICORN_CMD_ARGS": f"--log-level {self.model.config['log-level']}"
                     #},
                 }
             },

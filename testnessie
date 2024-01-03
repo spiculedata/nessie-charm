@@ -1,0 +1,14 @@
+auth:
+    # Authentication type can be: none, bearer or aws
+    type: none
+
+    # OpenID token for the "bearer" authentication type
+    # token: <OpenID token>
+
+    timeout: 10
+
+# Nessie endpoint
+endpoint: http://localhost:19120/api/v1
+
+# whether to skip SSL cert verification
+verify: true

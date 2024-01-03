@@ -86,3 +86,8 @@ config:
       default: 19120
       description: Default port on which Nessie is available
       type: int
+
+requires:
+  database:
+    interface: postgresql_client
+    limit: 1

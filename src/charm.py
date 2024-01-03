@@ -84,7 +84,9 @@ class NessieCharm(ops.CharmBase):
         If any of the values are not present, it will be set to None.
         The method returns this dictionary as output.
         """
+        logger.info("Collecting relation data")
         db_data = self.fetch_postgres_relation_data()
+        logger.info("Populating env")
         env = {
             "NESSIE_VERSION_STORE_TYPE": "JDBC",
             "QUARKUS_DATASOURCE_JDBC_URL": "jdbc:postgresql://"+db_data.get("db_host", None)+":"+db_data.get("db_port", None)+"/"+db_data.get("db_database", None),
@@ -95,6 +97,7 @@ class NessieCharm(ops.CharmBase):
         }
         for key, value in env.items():
             logger.debug(f'{key}\t{value}')
+        logger.info("Returning env")
         return env
     def fetch_postgres_relation_data(self) -> dict:
         """Fetch postgres relation data.

@@ -86,10 +86,12 @@ class NessieCharm(ops.CharmBase):
         """
         db_data = self.fetch_postgres_relation_data()
         env = {
+            "NESSIE_VERSION_STORE_TYPE": "JDBC",
+            "QUARKUS_DATASOURCE_JDBC_URL": "jdbc:postgresql://"+db_data.get("db_host", None)+":"+db_data.get("db_port", None)+"/"+db_data.get("db_database", None),
             "DEMO_SERVER_DB_HOST": db_data.get("db_host", None),
             "DEMO_SERVER_DB_PORT": db_data.get("db_port", None),
-            "DEMO_SERVER_DB_USER": db_data.get("db_username", None),
-            "DEMO_SERVER_DB_PASSWORD": db_data.get("db_password", None),
+            "QUARKUS_DATASOURCE_USERNAME": db_data.get("db_username", None),
+            "QUARKUS_DATASOURCE_PASSWORD": db_data.get("db_password", None),
         }
         return env
     def fetch_postgres_relation_data(self) -> dict:
@@ -113,6 +115,7 @@ class NessieCharm(ops.CharmBase):
                 "db_port": port,
                 "db_username": data["username"],
                 "db_password": data["password"],
+                "db_database": "names_db"
             }
             return db_data
         self.unit.status = WaitingStatus("Waiting for database relation")
@@ -153,8 +156,10 @@ class NessieCharm(ops.CharmBase):
 
     def _request_version(self) -> str:
         """Helper for fetching the version from the running workload using the API."""
-        resp = requests.get(f"http://localhost:{self.config['server-port']}/version", timeout=10)
-        return resp.json()["version"]
+        #resp = requests.get(f"http://localhost:{self.config['server-port']}/version", timeout=10)
+        #return resp.json()["version"]
+        return "1.0"
+
     def _handle_ports(self):
         port = int(self.config["webui-port"])
         self.unit.set_ports(port)

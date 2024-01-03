@@ -135,7 +135,7 @@ class NessieCharm(ops.CharmBase):
                 self.pebble_service_name: {
                     "override": "replace",
                     "summary": "nessie",
-                    "command": "printenv",
+                    "command": "/usr/local/s2i/run",
                     "startup": "enabled",
                     "environment": self.app_environment,
                 }

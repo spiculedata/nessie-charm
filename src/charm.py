@@ -14,6 +14,7 @@ https://juju.is/docs/sdk/create-a-minimal-kubernetes-charm
 
 import logging
 
+import requests
 import ops
 from charms.data_platform_libs.v0.data_interfaces import DatabaseCreatedEvent
 from charms.data_platform_libs.v0.data_interfaces import DatabaseRequires
@@ -36,6 +37,7 @@ class NessieCharm(ops.CharmBase):
         self.framework.observe(self.database.on.database_created, self._on_database_created)
         self.framework.observe(self.database.on.endpoints_changed, self._on_database_created)
         self.framework.observe(self.on.database_relation_broken, self._on_database_relation_removed)
+        self.unit.set_workload_version(self.version)
 
     def _on_nessie_pebble_ready(self, event: ops.PebbleReadyEvent):
         """Define and start a workload using the Pebble API.
@@ -135,6 +137,23 @@ class NessieCharm(ops.CharmBase):
             },
         }
 
+    @property
+    def version(self) -> str:
+        """Reports the current workload (FastAPI app) version."""
+        if self.container.can_connect() and self.container.get_services(self.pebble_service_name):
+            try:
+                return self._request_version()
+            # Catching Exception is not ideal, but we don't care much for the error here, and just
+            # default to setting a blank version since there isn't much the admin can do!
+            except Exception as e:
+                logger.warning("unable to get version from API: %s", str(e))
+                logger.exception(e)
+        return ""
+
+    def _request_version(self) -> str:
+        """Helper for fetching the version from the running workload using the API."""
+        resp = requests.get(f"http://localhost:{self.config['server-port']}/version", timeout=10)
+        return resp.json()["version"]
     def _handle_ports(self):
         port = int(self.config["webui-port"])
         self.unit.set_ports(port)

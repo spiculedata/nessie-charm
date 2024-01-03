@@ -29,6 +29,7 @@ class NessieCharm(ops.CharmBase):
 
     def __init__(self, *args):
         super().__init__(*args)
+        self.container = self.unit.get_container("nessie")
         self.framework.observe(self.on.nessie_pebble_ready, self._on_nessie_pebble_ready)
         self.framework.observe(self.on.config_changed, self._on_config_changed)
         self.database = DatabaseRequires(self, relation_name="database", database_name="names_db")

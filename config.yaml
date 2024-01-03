@@ -1,5 +1,5 @@
 options:
-  server-port:
+  webui-port:
     default: 19120
     description: Default port on which Nessie is available
     type: int

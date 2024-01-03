@@ -101,7 +101,7 @@ class NessieCharm(ops.CharmBase):
         }
 
     def _handle_ports(self):
-        port = int(self.config["server-port"])
+        port = int(self.config["webui-port"])
         self.unit.set_ports(port)
 
 
